@@ -1,0 +1,13 @@
+<%= turbo_stream_from :paintings %>
+
+<h1>Paintings</h1>
+
+<p>
+  Paintings are redrawn about every 5 seconds.
+</p>
+
+<%= button_to "Create Painting", paintings_path %>
+
+<div id="paintings">
+  <%= render @paintings %>
+</div>

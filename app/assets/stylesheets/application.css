@@ -8,3 +8,21 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+.painting:not(:last-child) {
+  margin-bottom: 50px;
+}
+
+.frame {
+  border: solid;
+  width: 250px;
+  height: 125px;
+}
+
+.inside {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}

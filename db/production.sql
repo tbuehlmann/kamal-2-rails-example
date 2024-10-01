@@ -1,0 +1,4 @@
+CREATE DATABASE kamal_2_rails_example_production;
+CREATE DATABASE kamal_2_rails_example_production_cache;
+CREATE DATABASE kamal_2_rails_example_production_queue;
+CREATE DATABASE kamal_2_rails_example_production_cable;

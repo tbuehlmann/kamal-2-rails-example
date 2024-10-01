@@ -19,7 +19,6 @@ default: &default
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
-
 development:
   <<: *default
   database: kamal_2_rails_example_development
@@ -81,6 +80,7 @@ test:
 production:
   primary: &primary_production
     <<: *default
+    host: <%= ENV["DB_HOST"] %>
     database: kamal_2_rails_example_production
     username: kamal_2_rails_example
     password: <%= ENV["KAMAL_2_RAILS_EXAMPLE_DATABASE_PASSWORD"] %>

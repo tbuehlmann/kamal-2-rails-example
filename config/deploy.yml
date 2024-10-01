@@ -2,28 +2,30 @@
 service: kamal_2_rails_example
 
 # Name of the container image.
-image: your-user/kamal_2_rails_example
+image: tbuehlmann/kamal_2_rails_example
 
 # Deploy to these servers.
 servers:
   web:
-    - 192.168.0.1
-  # job:
-  #   hosts:
-  #     - 192.168.0.1
-  #   cmd: bin/jobs
+    - my_hetzner_public_ip
+  job:
+    hosts:
+      - my_hetzner_public_ip
+    cmd: bin/jobs
 
 # Enable SSL auto certification via Let's Encrypt (and allow for multiple apps on one server).
 # Set ssl: false if using something like Cloudflare to terminate SSL (but keep host!).
 proxy:
   ssl: true
-  host: app.example.com
+  host: my_domain
 
 # Credentials for your image host.
 registry:
   # Specify the registry server, if you're not using Docker Hub
   # server: registry.digitalocean.com / ghcr.io / ...
-  username: your-user
+  server: ghcr.io
+
+  username: tbuehlmann
 
   # Always use an access token rather than real password when possible.
   password:
@@ -33,10 +35,11 @@ registry:
 env:
   secret:
     - RAILS_MASTER_KEY
+    - KAMAL_2_RAILS_EXAMPLE_DATABASE_PASSWORD
   clear:
     # Run the Solid Queue Supervisor inside the web server's Puma process to do jobs.
     # When you start using multiple servers, you should split out job processing to a dedicated machine.
-    SOLID_QUEUE_IN_PUMA: true
+    # SOLID_QUEUE_IN_PUMA: true
 
     # Set number of processes dedicated to Solid Queue (default: 1)
     # JOB_CONCURRENCY: 3
@@ -45,7 +48,7 @@ env:
     # WEB_CONCURRENCY: 2
 
     # Match this to any external database server to configure Active Record correctly
-    # DB_HOST: 192.168.0.2
+    DB_HOST: kamal_2_rails_example-db
 
     # Log everything from Rails
     # RAILS_LOG_LEVEL: debug
@@ -110,3 +113,17 @@ builder:
 #     port: 6379
 #     directories:
 #       - data:/data
+accessories:
+  db:
+    image: postgres:16-alpine
+    host: my_hetzner_public_ip
+    port: 5432
+    env:
+      clear:
+        POSTGRES_USER: kamal_2_rails_example
+      secret:
+        - POSTGRES_PASSWORD
+    files:
+      - db/production.sql:/docker-entrypoint-initdb.d/setup.sql
+    directories:
+      - data:/var/lib/postgresql/data
